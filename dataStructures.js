@@ -103,12 +103,32 @@ rest1.owner ??= 'ANONYMOUS';
 console.log(rest1, rest2);
 
 const engineers = new Set(['Arka', 'Mosfik', 'Zareen', 'Tahiyat']);
-console.log(engineers);
+// console.log(engineers);
 engineers.add('Rabbi');
 engineers.add('Akif');
-console.log(engineers);
+// console.log(engineers);
 engineers.delete('Akif');
-console.log(engineers);
+// console.log(engineers);
 
 const engineersArray = [...engineers];
-console.log(engineersArray);
+// console.log(engineersArray);
+
+const engineer = new Map();
+engineer.set('Name', 'Arka Bhuiyan');
+engineer.set('Age', 25);
+engineer.set('Designation', 'Software Engineer');
+engineer.set('Institute', 'University of Dhaka');
+console.log(engineer.set('Organization', 'BJIT'));
+engineer.set('Language', ['English', 'Bengali']);
+engineer.set('Programming Languages', [
+  'Java',
+  'Python',
+  'C',
+  'JavaScript',
+  ''
+]);
+console.log(engineer);
+console.log(engineer.has('Language'));
+engineer.delete('Age');
+console.log(engineer);
+console.log(engineer.size);
