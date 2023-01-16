@@ -1,5 +1,20 @@
 'use strict';
 
+const openingHours = {
+  sun: {
+    open: '10:00 AM',
+    close: '11:00 PM'
+  },
+  mon: {
+    open: '11:00 AM',
+    close: '10:00 PM'
+  },
+  restOfDays: {
+    open: '09:00 AM',
+    close: '12:00 AM'
+  }
+};
+
 const restaurant = {
   name: 'Star Kabab',
   location: 'Jhigatola',
@@ -9,27 +24,14 @@ const restaurant = {
   order: function (starter, main) {
     return [this.starterMenu[starter], this.mainCourse[main]];
   },
-  openingHours: {
-    sun: {
-      open: '10:00 AM',
-      close: '11:00 PM'
-    },
-    mon: {
-      open: '11:00 AM',
-      close: '10:00 PM'
-    },
-    restOfDays: {
-      open: '09:00 AM',
-      close: '12:00 AM'
-    }
-  }
+  hours: openingHours
 };
 
 const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 for (let day of days) {
   // console.log(day);
-  let open = restaurant.openingHours[day]?.open ?? 'closed';
+  let open = restaurant.hours[day]?.open ?? 'closed';
   let message =
     open == 'closed'
       ? `We are closed on ${day}.`
@@ -42,7 +44,7 @@ const list = [1, 2, 3, 4];
 let [a, b, c, d] = list;
 // console.log(a, b, c, d);
 
-let [firstItem, , secondItem] = restaurant.categories;
+let [firstItem, hour, secondItem] = restaurant.categories;
 /* console.log(firstItem, secondItem); */
 
 // swaping variables
@@ -64,7 +66,7 @@ let [x = 1, y = 1, z = 1] = arr;
 
 // Destructuring Objects
 
-let { name, openingHours, categories } = restaurant;
+let { name, categories } = restaurant;
 // console.log(name, openingHours, categories);
 
 let {
@@ -127,8 +129,58 @@ engineer.set('Programming Languages', [
   'JavaScript',
   ''
 ]);
-console.log(engineer);
-console.log(engineer.has('Language'));
+// console.log(engineer);
+// console.log(engineer.has('Language'));
 engineer.delete('Age');
-console.log(engineer);
-console.log(engineer.size);
+// console.log(engineer);
+// console.log(engineer.size);
+
+const question = new Map([
+  ['question', 'What is the best programming language in the world?'],
+  ['Option 1', 'C'],
+  ['Option 2', 'Java'],
+  ['Option 3', 'JavaScript'],
+  ['Option 4', 'Python'],
+  ['Correct', 'Option 4'],
+  ['true', 'Correct'],
+  ['false', 'try again']
+]);
+
+console.log(question);
+
+// console.log(restaurant);
+
+// console.log(Object.entries(openingHours));
+
+// convert an object to map
+const hoursMap = new Map(Object.entries(openingHours));
+// console.log(hoursMap);
+
+console.log(question.get('question'));
+
+let i = 0;
+for (let [key, value] of question) {
+  if (key.startsWith('Option')) {
+    i++;
+    console.log(`Answer ${i} : ${value}.`);
+  }
+}
+
+var prompt = require('prompt');
+prompt.start();
+// const answer = Number(prompt('Your Answer?'));
+// const answer = WScript.StdIn.ReadLine();
+console.log('Your Answer?');
+prompt.get(['answer'], function (err, res) {
+  console.log(res.answer);
+  let choice = `Option ${res.answer}`;
+  if (question.has(choice)) {
+    if (question.get('Correct') === choice) {
+      console.log('You are right. Congrats');
+    } else {
+      console.log('Oops. Bad luck. Try next time');
+    }
+  } else {
+    console.log('Invalid choice');
+  }
+});
