@@ -4,22 +4,34 @@ class Person {
     this.lastName = lastName;
     this.birthDate = birthDate;
   }
+
+  set gender(gender) {
+    this._gender = gender;
+  }
+
   calcAge() {
     let currentDate = new Date();
     let birthDate = new Date(this.birthDate);
     return currentDate.getFullYear() - birthDate.getFullYear();
   }
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
   printInfo() {
     console.log(
       `Name of the person: ${this.firstName} ${
         this.lastName
-      }; age is: ${this.calcAge()}.`
+      }; age is: ${this.calcAge()}, sex is: ${this._gender}.`
     );
   }
 }
 
 const arka = new Person('Arka', 'Bhuiyan', '1997-09-01');
+arka.gender = 'male';
 arka.printInfo();
+console.log(`Arka's Full name is: ${arka.fullName}`);
 
 // class declarations are never hoisted
 // classes are also first class citizens as under the hood, they are functions
