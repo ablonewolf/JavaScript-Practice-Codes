@@ -9,6 +9,10 @@ class Person {
     this._gender = gender;
   }
 
+  get gender() {
+    return this._gender;
+  }
+
   calcAge() {
     let currentDate = new Date();
     let birthDate = new Date(this.birthDate);
@@ -23,7 +27,7 @@ class Person {
     console.log(
       `Name of the person: ${this.firstName} ${
         this.lastName
-      }; age is: ${this.calcAge()}, sex is: ${this._gender}.`
+      }; age is: ${this.calcAge()}, sex is: ${this.gender}.`
     );
   }
 }
