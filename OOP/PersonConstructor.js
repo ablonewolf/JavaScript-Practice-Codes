@@ -31,6 +31,7 @@ const Student = function (firstName, lastName, birthDate, course) {
 
 // linking the students prototype with the prototype property of Person
 Student.prototype = Object.create(Person.prototype);
+Student.prototype.constructor = Student;
 
 Student.prototype.introduce = function () {
   console.log(`Hi! I am ${this.fullName()}. My major is ${this.course}.`);
