@@ -30,10 +30,15 @@ class Person {
       }; age is: ${this.calcAge()}, sex is: ${this.gender}.`
     );
   }
+
+  static greetings() {
+    console.log(`Greetings!!`);
+  }
 }
 
 const arka = new Person('Arka', 'Bhuiyan', '1997-09-01');
 arka.gender = 'male';
+Person.greetings();
 arka.printInfo();
 console.log(`Arka's Full name is: ${arka.fullName}`);
 
