@@ -27,6 +27,7 @@ class Account {
 
   balanceInfo() {
     console.log(`Balance for ${this.ownerName} is: ${this.balance}.`);
+    return this;
   }
 
   deposit(balance) {
@@ -34,6 +35,7 @@ class Account {
     console.log(
       `After depositing ${balance}, the net balance is: ${this.balance}.`
     );
+    return this;
   }
 
   withdraw(balance) {
@@ -42,22 +44,24 @@ class Account {
       console.log(
         `Withdrawn ${balance} from account. Now the net balance is: ${this.balance}.`
       );
-      return balance;
     } else {
       console.log(`Insufficient fund in the account.`);
     }
+    return this;
   }
 
   printInformation() {
     console.log(
       `Owner of the account is: ${this.ownerName} and the type of account is ${this.accountType}.`
     );
+    return this;
   }
 }
 
 const salaryAccountArka = new Account('Salary Account', 'Arka Bhuiyan', '1234');
-salaryAccountArka.deposit(50000);
-salaryAccountArka.withdraw(5000);
-salaryAccountArka.balanceInfo();
-salaryAccountArka.balanceInfo();
-salaryAccountArka.printInformation();
+salaryAccountArka
+  .deposit(50000)
+  .withdraw(5000)
+  .deposit(10000)
+  .balanceInfo()
+  .printInformation();
