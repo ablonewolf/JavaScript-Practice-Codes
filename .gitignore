@@ -4,4 +4,3 @@ node_modules/**
 /.idea/vcs.xml
 /.idea/JavaScirpt-Practice-Codes.iml
 /.idea/.gitignore
-package-lock.json
