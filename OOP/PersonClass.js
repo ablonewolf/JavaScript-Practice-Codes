@@ -36,11 +36,38 @@ class Person {
   }
 }
 
+class Student extends Person {
+  constructor(firstName, lastName, birthDate, subject) {
+    super(firstName, lastName, birthDate);
+    this.subject = subject;
+  }
+
+  printInfo() {
+    console.log(
+      `Name of the student is: ${
+        this.fullName
+      }, age is: ${this.calcAge()}, sex is: ${this.gender} and the major is: ${
+        this.subject
+      }`
+    );
+  }
+}
+
 const arka = new Person('Arka', 'Bhuiyan', '1997-09-01');
 arka.gender = 'male';
 Person.greetings();
 arka.printInfo();
 console.log(`Arka's Full name is: ${arka.fullName}`);
+
+const student = new Student(
+  'Arka',
+  'Bhuiyan',
+  '1997-09-01',
+  'Computer Science and Engineering'
+);
+student.gender = 'male';
+Person.greetings();
+student.printInfo();
 
 // class declarations are never hoisted
 // classes are also first class citizens as under the hood, they are functions
