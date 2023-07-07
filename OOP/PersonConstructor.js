@@ -11,8 +11,8 @@ Person.prototype.fullName = function () {
 };
 
 Person.prototype.calcAge = function () {
-    currentDate = new Date();
-    birthDate = new Date(this.birthDate);
+    let currentDate = new Date();
+    let birthDate = new Date(this.birthDate);
     return currentDate.getFullYear() - birthDate.getFullYear();
 };
 
