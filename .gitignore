@@ -1,6 +1,3 @@
 node_modules/@colors/colors/index.d.ts
 node_modules/**
-/.idea/modules.xml
-/.idea/vcs.xml
-/.idea/JavaScirpt-Practice-Codes.iml
-/.idea/.gitignore
+/.idea/**
