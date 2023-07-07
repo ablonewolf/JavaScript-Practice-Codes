@@ -31,6 +31,7 @@ const Student = function (firstName, lastName, birthDate, course) {
 
 // linking the students prototype with the prototype property of Person
 Student.prototype = Object.create(Person.prototype);
+// setting the default constructor for Student class. If not, by default the Person constructor will be called instead.
 Student.prototype.constructor = Student;
 
 Student.prototype.introduce = function () {
