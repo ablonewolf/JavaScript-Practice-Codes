@@ -15,7 +15,7 @@ const getCountryData = function (countryName) {
             <h3 class="country__name">${data.name.common}</h3>
             <h4 class="country__region">${data.region}</h4>
             <p class="country__row"><span>👫</span>${(
-              +data.population / 100000
+              +data.population / 1000000
             ).toFixed(1)}M people</p>
             <p class="country__row"><span>🗣️</span>${
               Object.values(data.languages)[0]
