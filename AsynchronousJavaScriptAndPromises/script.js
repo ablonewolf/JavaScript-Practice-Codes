@@ -45,7 +45,7 @@ const getCountryDataByName = function (countryName) {
     const neighbor = data.borders?.[0];
     // render the country data by code for the neighbor
     getCountryDataByCode(neighbor, countryName);
-    console.log(data);
+    // console.log(data);
   });
 };
 
@@ -59,9 +59,27 @@ const getCountryDataByCode = function (countryCode, parentCountry) {
     const [data] = JSON.parse(this.responseText);
     // render the country data
     renderCountryData(data, 'neighbor', parentCountry);
-    console.log(data);
+    // console.log(data);
   });
 };
 
+const getCountryDataUsingFetch = function (countryName) {
+  const request = fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+  request
+    .then((response) => response.json())
+    .then((data) => {
+      renderCountryData(data[0]);
+      const neighbor = data[0].borders?.[0];
+      getCountryDataByCodeUsingFetch(neighbor, countryName);
+    });
+};
+
+const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
+  const request = fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
+  request
+    .then((response) => response.json())
+    .then((data) => renderCountryData(data[0], 'neighbor', parentCountry));
+};
+
 getCountryDataByName('bangladesh');
-getCountryDataByName('india');
+getCountryDataUsingFetch('germany');
