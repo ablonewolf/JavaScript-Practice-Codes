@@ -19,7 +19,7 @@ const removeAdjacentText = function () {
 
 const renderError = function (errorMessage) {
   countriesContainer.insertAdjacentText('beforeend', errorMessage);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
 };
 
 function renderCountryData(data, className = '', parent = '') {
@@ -40,7 +40,7 @@ function renderCountryData(data, className = '', parent = '') {
           </div>
         </article>`;
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
   if (className !== '') {
     // adding the neighbor indication text.
     const neighborBefore = document.createElement('div');
@@ -99,6 +99,9 @@ const getCountryDataUsingFetch = function (countryName) {
     })
     .catch((error) => {
       renderError(`Something went wrong 🔥🔥🔥 ${error}`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
     });
 };
 
