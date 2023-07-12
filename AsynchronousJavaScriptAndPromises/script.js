@@ -10,7 +10,7 @@ const resetElements = function () {
 const removeAdjacentText = function () {
   const elements = countriesContainer.childNodes;
   elements.forEach((element) => {
-    if (element.textContent.startsWith('Something went wrong')) {
+    if (element.textContent.includes('wrong')) {
       // console.log(element);
       element.remove();
     }
@@ -24,7 +24,7 @@ const renderError = function (errorMessage) {
 
 function renderCountryData(data, className = '', parent = '') {
   const html = `<article class="country ${className} ${parent}">
-          <img class="country__img" src="${data.flags['png']}" />
+          <img class="country__img" src="${data?.flags['png']}" />
           <div class="country__data">
             <h3 class="country__name">${data.name.common}</h3>
             <h4 class="country__region">${data.region}</h4>
@@ -88,9 +88,16 @@ const getCountryDataByCode = function (countryCode, parentCountry) {
 const getCountryDataUsingFetch = function (countryName) {
   const request = fetch(`https://restcountries.com/v3.1/name/${countryName}`);
   request
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(
+          `No Country found named ${countryName}. Status: ${response.status}`
+        );
+      }
+      return response.json();
+    })
     .then((data) => {
-      renderCountryData(data?.[0]);
+      renderCountryData(data[0]);
       const neighbor = data[0].borders?.[0];
       return [neighbor, countryName];
     })
@@ -98,7 +105,7 @@ const getCountryDataUsingFetch = function (countryName) {
       getCountryDataByCodeUsingFetch(data[0], data[1]);
     })
     .catch((error) => {
-      renderError(`Something went wrong 🔥🔥🔥 ${error}`);
+      renderError(`Something went wrong 🔥🔥🔥 ${error} \n`);
     })
     .finally(() => {
       countriesContainer.style.opacity = 1;
@@ -109,7 +116,12 @@ const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
   const request = fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
   request
     .then((response) => response.json())
-    .then((data) => renderCountryData(data[0], 'neighbor', parentCountry));
+    .then((data) => renderCountryData(data[0], 'neighbor', parentCountry))
+    .catch((error) => {
+      renderError(
+        `Error fetching info about the country through code: ${error}`
+      );
+    });
 };
 
 btn.addEventListener('click', function () {
@@ -118,8 +130,8 @@ btn.addEventListener('click', function () {
     resetElements();
   }
   removeAdjacentText();
-  getCountryDataByName('bangladesh');
-  getCountryDataUsingFetch('germany');
+  // getCountryDataByName('bangladesh');
+  getCountryDataUsingFetch('australia');
 });
 
 // getCountryDataByName('bangladesh');
