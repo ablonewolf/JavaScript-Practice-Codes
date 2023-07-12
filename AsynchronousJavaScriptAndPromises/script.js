@@ -87,15 +87,7 @@ const getCountryDataByCode = function (countryCode, parentCountry) {
 
 const getCountryDataUsingFetch = function (countryName) {
   const request = fetch(`https://restcountries.com/v3.1/name/${countryName}`);
-  request
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(
-          `No Country found named ${countryName}. Status: ${response.status}`
-        );
-      }
-      return response.json();
-    })
+  prepareJson(request)
     .then((data) => {
       renderCountryData(data[0]);
       const neighbor = data[0].borders?.[0];
@@ -105,7 +97,7 @@ const getCountryDataUsingFetch = function (countryName) {
       getCountryDataByCodeUsingFetch(data[0], data[1]);
     })
     .catch((error) => {
-      renderError(`Something went wrong 🔥🔥🔥 ${error} \n`);
+      renderError(`Error fetching info about the country 🔥🔥🔥 ${error} \n`);
     })
     .finally(() => {
       countriesContainer.style.opacity = 1;
@@ -114,13 +106,10 @@ const getCountryDataUsingFetch = function (countryName) {
 
 const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
   const request = fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
-  request
-    .then((response) => response.json())
+  prepareJson(request)
     .then((data) => renderCountryData(data[0], 'neighbor', parentCountry))
     .catch((error) => {
-      renderError(
-        `Error fetching info about the country through code: ${error}`
-      );
+      renderError(`Error fetching info about the country 🔥🔥🔥. ${error}`);
     });
 };
 
@@ -134,5 +123,13 @@ btn.addEventListener('click', function () {
   getCountryDataUsingFetch('australia');
 });
 
+function prepareJson(request) {
+  return request.then((response) => {
+    if (!response.ok) {
+      throw new Error(`No Such Country found. Status: ${response.status}`);
+    }
+    return response.json();
+  });
+}
 // getCountryDataByName('bangladesh');
 // getCountryDataUsingFetch('germany');
