@@ -70,7 +70,10 @@ const getCountryDataUsingFetch = function (countryName) {
     .then((data) => {
       renderCountryData(data[0]);
       const neighbor = data[0].borders?.[0];
-      getCountryDataByCodeUsingFetch(neighbor, countryName);
+      return [neighbor, countryName];
+    })
+    .then((data) => {
+      getCountryDataByCodeUsingFetch(data[0], data);
     });
 };
 
