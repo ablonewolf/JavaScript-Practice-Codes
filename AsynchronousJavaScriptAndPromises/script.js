@@ -1,5 +1,27 @@
 'use strict';
 
+const resetElements = function () {
+  document.querySelectorAll('.country').forEach((element) => element.remove());
+  removeAdjacentText();
+  countriesContainer.style.opacity = 0;
+  // document.querySelector('.countries').parentElement.remove();
+};
+
+const removeAdjacentText = function () {
+  const elements = countriesContainer.childNodes;
+  elements.forEach((element) => {
+    if (element.textContent.startsWith('Something went wrong')) {
+      // console.log(element);
+      element.remove();
+    }
+  });
+};
+
+const renderError = function (errorMessage) {
+  countriesContainer.insertAdjacentText('beforeend', errorMessage);
+  countriesContainer.style.opacity = 1;
+};
+
 function renderCountryData(data, className = '', parent = '') {
   const html = `<article class="country ${className} ${parent}">
           <img class="country__img" src="${data.flags['png']}" />
@@ -68,12 +90,15 @@ const getCountryDataUsingFetch = function (countryName) {
   request
     .then((response) => response.json())
     .then((data) => {
-      renderCountryData(data[0]);
+      renderCountryData(data?.[0]);
       const neighbor = data[0].borders?.[0];
       return [neighbor, countryName];
     })
     .then((data) => {
-      getCountryDataByCodeUsingFetch(data[0], data);
+      getCountryDataByCodeUsingFetch(data[0], data[1]);
+    })
+    .catch((error) => {
+      renderError(`Something went wrong 🔥🔥🔥 ${error}`);
     });
 };
 
@@ -84,5 +109,15 @@ const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
     .then((data) => renderCountryData(data[0], 'neighbor', parentCountry));
 };
 
-getCountryDataByName('bangladesh');
-getCountryDataUsingFetch('germany');
+btn.addEventListener('click', function () {
+  const countryItems = document.getElementsByClassName('country');
+  if (countryItems.length > 0) {
+    resetElements();
+  }
+  removeAdjacentText();
+  getCountryDataByName('bangladesh');
+  getCountryDataUsingFetch('germany');
+});
+
+// getCountryDataByName('bangladesh');
+// getCountryDataUsingFetch('germany');
