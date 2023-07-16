@@ -10,8 +10,7 @@ const resetElements = function () {
 const removeAdjacentText = function () {
   const elements = countriesContainer.childNodes;
   elements.forEach((element) => {
-    if (element.textContent.includes('wrong')) {
-      // console.log(element);
+    if (element.textContent.includes('Error')) {
       element.remove();
     }
   });
