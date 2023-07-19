@@ -28,3 +28,10 @@ wait(2)
   .then(() => {
     console.log(`I waited for 3 seconds.`);
   });
+
+const whereAmI = async function (countryName) {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/name/${countryName}`
+  );
+  console.log(response);
+};
