@@ -27,7 +27,7 @@ body {
 }
 
 .countries {
-  /* margin-bottom: 8rem; */
+  margin-bottom: 8rem;
   display: flex;
 
   font-size: 2rem;
@@ -39,13 +39,13 @@ body {
   background-color: #fff;
   box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
   font-size: 1.8rem;
-  width: 30rem;
+  width: 25rem;
   border-radius: 0.7rem;
   margin: 0 3rem;
   /* overflow: hidden; */
 }
 
-.neighborBefore {
+.neighbourBefore {
   width: 100%;
   /* position: absolute; */
   top: -4rem;
@@ -57,15 +57,15 @@ body {
   color: #888;
 }
 
-.neighbor {
+.neighbour {
   position: inherit;
   transform: scale(0.8) translateY(1rem);
   margin-left: 0;
 }
 
 .country__img {
-  width: 30rem;
-  height: 17rem;
+  width: 25rem;
+  height: 13rem;
   object-fit: cover;
   background-color: #eee;
   border-top-left-radius: 0.7rem;

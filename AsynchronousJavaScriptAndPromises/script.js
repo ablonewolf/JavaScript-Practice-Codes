@@ -41,12 +41,12 @@ function renderCountryData(data, className = '', parent = '') {
   countriesContainer.insertAdjacentHTML('beforeend', html);
   // countriesContainer.style.opacity = 1;
   if (className !== '') {
-    // adding the neighbor indication text.
-    const neighborBefore = document.createElement('div');
-    neighborBefore.textContent = `Neighbour of ${parent}`;
-    neighborBefore.classList.add('neighborBefore');
-    const neighbor = document.querySelector(`.${parent}`);
-    neighbor.prepend(neighborBefore);
+    // adding the neighbour indication text.
+    const neighbourBefore = document.createElement('div');
+    neighbourBefore.textContent = `Neighbour of ${parent}`;
+    neighbourBefore.classList.add('neighbourBefore');
+    const neighbour = document.querySelector(`.${parent}`);
+    neighbour.prepend(neighbourBefore);
   }
 }
 
@@ -63,9 +63,9 @@ const getCountryDataByName = function (countryName) {
     const [data] = JSON.parse(this.responseText);
     // render the country data
     renderCountryData(data);
-    const neighbor = data.borders?.[0];
-    // render the country data by code for the neighbor
-    getCountryDataByCode(neighbor, countryName);
+    const neighbour = data.borders?.[0];
+    // render the country data by code for the neighbour
+    getCountryDataByCode(neighbour, countryName);
     // console.log(data);
   });
 };
@@ -79,7 +79,7 @@ const getCountryDataByCode = function (countryCode, parentCountry) {
   request.addEventListener('load', function () {
     const [data] = JSON.parse(this.responseText);
     // render the country data
-    renderCountryData(data, 'neighbor', parentCountry);
+    renderCountryData(data, 'neighbour', parentCountry);
     // console.log(data);
   });
 };
@@ -89,17 +89,25 @@ const getCountryDataUsingFetch = function (countryName) {
   prepareResponse(request, countryName);
 };
 
-const whereAmI = async function (countryName) {
+const loadCountryUsingAsyncAwait = async function (countryName) {
   const response = await fetch(
     `https://restcountries.com/v3.1/name/${countryName}`
   );
   console.log(response);
+  const data = await response.json();
+  renderCountryData(data[0]);
+  const neighbourCode = data[0].borders?.[0];
+  const neighbourResponse = await fetch(
+    `https://restcountries.com/v3.1/alpha/${neighbourCode}`
+  );
+  const neighbourData = await neighbourResponse.json();
+  renderCountryData(neighbourData[0], 'neighbour', countryName);
 };
 
 const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
   const request = fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
   prepareJson(request)
-    .then((data) => renderCountryData(data[0], 'neighbor', parentCountry))
+    .then((data) => renderCountryData(data[0], 'neighbour', parentCountry))
     .catch((error) => {
       renderError(`Error fetching info about the country 🔥🔥🔥. ${error}`);
     });
@@ -111,19 +119,19 @@ btn.addEventListener('click', function () {
     resetElements();
   }
   removeAdjacentText();
-  // getCountryDataByName('bangladesh');
-  // getCountryDataUsingFetch('australia');
   getCountryDataByName('bangladesh');
   getCountryDataUsingFetch('germany');
-  whereAmI('iraq');
+  // getCountryDataByName('bangladesh');
+  // getCountryDataUsingFetch('germany');
+  loadCountryUsingAsyncAwait('brazil');
 });
 
 function prepareResponse(response, countryName) {
   prepareJson(response)
     .then((data) => {
       renderCountryData(data[0]);
-      const neighbor = data[0].borders?.[0];
-      return [neighbor, countryName];
+      const neighbour = data[0].borders?.[0];
+      return [neighbour, countryName];
     })
     .then((data) => {
       getCountryDataByCodeUsingFetch(data[0], data[1]);
