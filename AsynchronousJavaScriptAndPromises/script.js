@@ -86,21 +86,14 @@ const getCountryDataByCode = function (countryCode, parentCountry) {
 
 const getCountryDataUsingFetch = function (countryName) {
   const request = fetch(`https://restcountries.com/v3.1/name/${countryName}`);
-  prepareJson(request)
-    .then((data) => {
-      renderCountryData(data[0]);
-      const neighbor = data[0].borders?.[0];
-      return [neighbor, countryName];
-    })
-    .then((data) => {
-      getCountryDataByCodeUsingFetch(data[0], data[1]);
-    })
-    .catch((error) => {
-      renderError(`Error fetching info about the country 🔥🔥🔥 ${error} \n`);
-    })
-    .finally(() => {
-      countriesContainer.style.opacity = 1;
-    });
+  prepareResponse(request, countryName);
+};
+
+const whereAmI = async function (countryName) {
+  const response = await fetch(
+    `https://restcountries.com/v3.1/name/${countryName}`
+  );
+  console.log(response);
 };
 
 const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
@@ -119,8 +112,29 @@ btn.addEventListener('click', function () {
   }
   removeAdjacentText();
   // getCountryDataByName('bangladesh');
-  getCountryDataUsingFetch('australia');
+  // getCountryDataUsingFetch('australia');
+  getCountryDataByName('bangladesh');
+  getCountryDataUsingFetch('germany');
+  whereAmI('iraq');
 });
+
+function prepareResponse(response, countryName) {
+  prepareJson(response)
+    .then((data) => {
+      renderCountryData(data[0]);
+      const neighbor = data[0].borders?.[0];
+      return [neighbor, countryName];
+    })
+    .then((data) => {
+      getCountryDataByCodeUsingFetch(data[0], data[1]);
+    })
+    .catch((error) => {
+      renderError(`Error fetching info about the country 🔥🔥🔥 ${error} \n`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+}
 
 function prepareJson(request) {
   return request.then((response) => {
@@ -130,5 +144,3 @@ function prepareJson(request) {
     return response.json();
   });
 }
-// getCountryDataByName('bangladesh');
-// getCountryDataUsingFetch('germany');
