@@ -90,18 +90,24 @@ const getCountryDataUsingFetch = function (countryName) {
 };
 
 const loadCountryUsingAsyncAwait = async function (countryName) {
-  const response = await fetch(
-    `https://restcountries.com/v3.1/name/${countryName}`
-  );
-  console.log(response);
-  const data = await response.json();
-  renderCountryData(data[0]);
-  const neighbourCode = data[0].borders?.[0];
-  const neighbourResponse = await fetch(
-    `https://restcountries.com/v3.1/alpha/${neighbourCode}`
-  );
-  const neighbourData = await neighbourResponse.json();
-  renderCountryData(neighbourData[0], 'neighbour', countryName);
+  try {
+    const response = await fetch(
+      `https://restcountries.com/v3.1/name/${countryName}`
+    );
+    console.log(response);
+    const data = await response.json();
+    renderCountryData(data[0]);
+    const neighbourCode = data[0].borders?.[0];
+    const neighbourResponse = await fetch(
+      `https://restcountries.com/v3.1/alpha/${neighbourCode}`
+    );
+    const neighbourData = await neighbourResponse.json();
+    renderCountryData(neighbourData[0], 'neighbour', countryName);
+  } catch (error) {
+    renderError(
+      `Error fetching info about the country named ${countryName} 🔥🔥🔥. ${error}`
+    );
+  }
 };
 
 const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
