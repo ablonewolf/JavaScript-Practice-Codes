@@ -94,7 +94,11 @@ const loadCountryUsingAsyncAwait = async function (countryName) {
     const response = await fetch(
       `https://restcountries.com/v3.1/name/${countryName}`
     );
-    console.log(response);
+    if (!response.ok) {
+      throw new Error(
+        `Unknown country. Perhaps no such country exists named ${countryName}.`
+      );
+    }
     const data = await response.json();
     renderCountryData(data[0]);
     const neighbourCode = data[0].borders?.[0];
@@ -129,7 +133,7 @@ btn.addEventListener('click', function () {
   getCountryDataUsingFetch('germany');
   // getCountryDataByName('bangladesh');
   // getCountryDataUsingFetch('germany');
-  loadCountryUsingAsyncAwait('brazil');
+  loadCountryUsingAsyncAwait('bashundhara');
 });
 
 function prepareResponse(response, countryName) {
