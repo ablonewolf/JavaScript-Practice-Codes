@@ -22,6 +22,7 @@ const renderError = function (errorMessage) {
 };
 
 function renderCountryData(data, className = '', parent = '') {
+  countriesContainer.style.opacity = 1;
   const html = `<article class="country ${className} ${parent}">
           <img class="country__img" src="${data?.flags['png']}" />
           <div class="country__data">
@@ -83,58 +84,16 @@ const getCountryDataByCode = function (countryCode, parentCountry) {
     // console.log(data);
   });
 };
-
-const getCountryDataUsingFetch = function (countryName) {
-  const request = fetch(`https://restcountries.com/v3.1/name/${countryName}`);
-  prepareResponse(request, countryName);
-};
-
-const loadCountryUsingAsyncAwait = async function (countryName) {
-  try {
-    const response = await fetch(
-      `https://restcountries.com/v3.1/name/${countryName}`
-    );
-    if (!response.ok) {
-      throw new Error(
-        `Unknown country. Perhaps no such country exists named ${countryName}.`
-      );
-    }
-    const data = await response.json();
-    renderCountryData(data[0]);
-    const neighbourCode = data[0].borders?.[0];
-    const neighbourResponse = await fetch(
-      `https://restcountries.com/v3.1/alpha/${neighbourCode}`
-    );
-    const neighbourData = await neighbourResponse.json();
-    renderCountryData(neighbourData[0], 'neighbour', countryName);
-  } catch (error) {
-    renderError(
-      `Error fetching info about the country named ${countryName} 🔥🔥🔥. ${error}`
-    );
-  }
-};
-
-const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
-  const request = fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
-  prepareJson(request)
-    .then((data) => renderCountryData(data[0], 'neighbour', parentCountry))
-    .catch((error) => {
-      renderError(`Error fetching info about the country 🔥🔥🔥. ${error}`);
-    });
-};
-
-btn.addEventListener('click', function () {
-  const countryItems = document.getElementsByClassName('country');
-  if (countryItems.length > 0) {
-    resetElements();
-  }
-  removeAdjacentText();
-  getCountryDataByName('bangladesh');
-  getCountryDataUsingFetch('germany');
-  // getCountryDataByName('bangladesh');
-  // getCountryDataUsingFetch('germany');
-  loadCountryUsingAsyncAwait('bashundhara');
-});
+async function prepareCountryData(response, country) {
+  // console.log(countryName);
+  renderCountryData(response[0]);
+  const neighbourCode = response[0].borders?.[0];
+  const neighbourResponse = await fetch(
+    `https://restcountries.com/v3.1/alpha/${neighbourCode}`
+  );
+  const neighbourData = await neighbourResponse.json();
+  renderCountryData(neighbourData[0], 'neighbour', country);
+}
 
 function prepareResponse(response, countryName) {
   prepareJson(response)
@@ -162,3 +121,71 @@ function prepareJson(request) {
     return response.json();
   });
 }
+
+const prepareJsonOfCountry = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then((response) => {
+    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
+
+    return response.json();
+  });
+};
+
+const getCountryDataUsingFetch = function (countryName) {
+  const request = fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+  prepareResponse(request, countryName);
+};
+
+const loadCountryUsingAsyncAwait = async function (countryName) {
+  try {
+    const response = await prepareJsonOfCountry(
+      `https://restcountries.com/v3.1/name/${countryName}`
+    );
+
+    prepareCountryData(response, countryName);
+  } catch (error) {
+    renderError(
+      `Error fetching info about the country named ${countryName} 🔥🔥🔥. ${error}`
+    );
+  }
+};
+
+const loadCountriesParallely = async function (country1, country2, country3) {
+  try {
+    const responses = await Promise.all([
+      prepareJsonOfCountry(`https://restcountries.com/v3.1/name/${country1}`),
+      prepareJsonOfCountry(`https://restcountries.com/v3.1/name/${country2}`),
+      prepareJsonOfCountry(`https://restcountries.com/v3.1/name/${country3}`)
+    ]);
+    // console.log(responses);
+    const countries = [country1, country2, country3];
+    let i = 0;
+    responses.map((response) => {
+      prepareCountryData(response, countries[i++]);
+    });
+  } catch (error) {
+    renderError(`Error fetching info about one or more countries.`);
+  }
+};
+
+const getCountryDataByCodeUsingFetch = function (countryCode, parentCountry) {
+  const request = fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`);
+  prepareJson(request)
+    .then((data) => renderCountryData(data[0], 'neighbour', parentCountry))
+    .catch((error) => {
+      renderError(`Error fetching info about the country 🔥🔥🔥. ${error}`);
+    });
+};
+
+btn.addEventListener('click', function () {
+  const countryItems = document.getElementsByClassName('country');
+  if (countryItems.length > 0) {
+    resetElements();
+  }
+  removeAdjacentText();
+  // getCountryDataByName('bangladesh');
+  // getCountryDataUsingFetch('germany');
+  // getCountryDataByName('bangladesh');
+  // getCountryDataUsingFetch('germany');
+  // loadCountryUsingAsyncAwait('brazil');
+  loadCountriesParallely('bangladesh', 'brazil', 'germany');
+});
